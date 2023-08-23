@@ -1,0 +1,12 @@
+[package]
+name = "table_translator"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libretrans = "0.1.8"
+libretranslate = "0.5.1"
+mysql = "24.0.0"
+tokio = "1.32.0"
