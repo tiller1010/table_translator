@@ -1,3 +1,5 @@
 /target
-data.csv
+*.csv
+.env
+Cargo.lock
 
