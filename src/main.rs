@@ -1,15 +1,18 @@
 //use tokio;
+use clap::Command;
 
 mod get_source;
 mod read_lines;
 mod translate_text;
 
-//#[tokio::main]
-//async fn main() {
-fn main() {
-    // Generate english_original.csv from MySQL
-    // get_source::get_source();
+fn cli() -> Command {
+    Command::new("translate_table")
+        .subcommand(Command::new("generate_source"))
+        .subcommand(Command::new("translate"))
+        .subcommand(Command::new("all"))
+}
 
+fn translate() {
     // Put csv content into vector
     let lines = read_lines::read_lines("english_original.csv").unwrap();
     let mut data: Vec<Vec<String>> = Vec::new();
@@ -39,6 +42,34 @@ fn main() {
             continue;
         }
         wtr.write_record(&[vec.get(0).unwrap(), vec.get(1).unwrap()]).unwrap();
+    }
+}
+
+//#[tokio::main]
+//async fn main() {
+fn main() {
+    let matches = cli().get_matches();
+
+    match matches.subcommand() {
+        Some(("generate_source", sub_matches)) => {
+            println!("Generating source...");
+            // Generate english_original.csv from MySQL
+            get_source::get_source();
+        }
+        Some(("translate", sub_matches)) => {
+            println!("Translating...");
+            translate();
+        }
+        Some(("all", sub_matches)) => {
+            println!("Generating source...");
+            // Generate english_original.csv from MySQL
+            get_source::get_source();
+            println!("Translating...");
+            translate();
+        }
+        _ => {
+            println!("No command specified");
+        }
     }
 
 }
