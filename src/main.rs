@@ -52,15 +52,18 @@ fn main() {
 
     match matches.subcommand() {
         Some(("generate_source", sub_matches)) => {
+            println!("{:?}", sub_matches);
             println!("Generating source...");
             // Generate english_original.csv from MySQL
             get_source::get_source();
         }
         Some(("translate", sub_matches)) => {
+            println!("{:?}", sub_matches);
             println!("Translating...");
             translate();
         }
         Some(("all", sub_matches)) => {
+            println!("{:?}", sub_matches);
             println!("Generating source...");
             // Generate english_original.csv from MySQL
             get_source::get_source();

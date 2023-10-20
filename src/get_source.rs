@@ -18,14 +18,14 @@ pub fn get_source() {
             content,
         )
     }).unwrap();
-    println!("{:?}", selected_content);
 
     let mut wtr = csv::Writer::from_path("english_original.csv").unwrap();
     for (title, content) in selected_content {
         if title.is_none() || content.is_none() {
             continue;
         }
-        wtr.write_record(&[title.unwrap(), content.unwrap()]).unwrap();
+        let content = content.unwrap().replace("\n", " ");
+        wtr.write_record(&[title.unwrap(), content]).unwrap();
     }
 
 }
