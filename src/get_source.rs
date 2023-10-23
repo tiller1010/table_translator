@@ -51,5 +51,12 @@ pub fn get_source() {
         wtr.write_record(&[title.unwrap(), content.unwrap(), record_id.unwrap()]).unwrap();
     }
 
+    wtr.flush().unwrap();
+
+    // Replace all `""` with `"`
+    let file = std::fs::read_to_string("english_original.csv").unwrap();
+    let file = file.replace("\"\"", "\"");
+    std::fs::write("english_original.csv", file).unwrap();
+
 }
 
