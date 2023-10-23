@@ -4,11 +4,13 @@ use clap::Command;
 mod get_source;
 mod read_lines;
 mod translate_text;
+mod insert_translations;
 
 fn cli() -> Command {
     Command::new("translate_table")
         .subcommand(Command::new("generate_source"))
         .subcommand(Command::new("translate"))
+        .subcommand(Command::new("insert_translations"))
         .subcommand(Command::new("all"))
 }
 
@@ -18,9 +20,7 @@ fn translate() {
     let mut data: Vec<Vec<String>> = Vec::new();
     for line in lines {
         data.push(read_lines::get_vector_from_csv_line(&line));
-        println!("{:?}", read_lines::get_vector_from_csv_line(&line));
     }
-//    println!("{:?}", data);
 
     // Translate vector
     let mut translated_data: Vec<Vec<String>> = Vec::new();
@@ -33,15 +33,14 @@ fn translate() {
         *row = translated_row;
         translated_data.push(row.to_vec());
     }
-//    println!("{:?}", translated_data);
 
     // output to csv
     let mut wtr = csv::Writer::from_path("spanish_output.csv").unwrap();
     for vec in translated_data {
-        if vec.get(0).is_none() || vec.get(1).is_none() {
+        if vec.get(0).is_none() || vec.get(1).is_none() || vec.get(2).is_none() {
             continue;
         }
-        wtr.write_record(&[vec.get(0).unwrap(), vec.get(1).unwrap()]).unwrap();
+        wtr.write_record(&[vec.get(0).unwrap(), vec.get(1).unwrap(), vec.get(2).unwrap()]).unwrap();
     }
 }
 
@@ -62,6 +61,11 @@ fn main() {
             println!("Translating...");
             translate();
         }
+        Some(("insert_translations", sub_matches)) => {
+            println!("{:?}", sub_matches);
+            println!("Inserting translations...");
+            insert_translations::insert_translations();
+        }
         Some(("all", sub_matches)) => {
             println!("{:?}", sub_matches);
             println!("Generating source...");
@@ -69,6 +73,8 @@ fn main() {
             get_source::get_source();
             println!("Translating...");
             translate();
+            println!("Inserting translations...");
+            insert_translations::insert_translations();
         }
         _ => {
             println!("No command specified");

@@ -4,6 +4,11 @@ use crate::read_lines;
 
 pub fn translate_text(input: &str) -> String {
 
+    // If string is an integer, return it
+    if input.parse::<i32>().is_ok() {
+        return input.to_string();
+    }
+
     // Remove surrounding quotes if they exist
     let mut input = input.to_string();
     if input.starts_with("\"") && input.ends_with("\"") {
