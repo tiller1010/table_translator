@@ -2,7 +2,7 @@ use text_translator::*;
 
 use crate::read_lines;
 
-pub fn translate_text(input: &str) -> String {
+pub fn translate_text(input: &str, locale: &str) -> String {
 
     // If string is an integer, return it
     if input.parse::<i32>().is_ok() {
@@ -40,7 +40,7 @@ pub fn translate_text(input: &str) -> String {
             if tag.contains(">") {
                 let mut html_tag = tag.split(">").collect::<Vec<&str>>();
                 if html_tag.len() > 1 {
-                    let translated_text = translate_text(html_tag[1]);
+                    let translated_text = translate_text(html_tag[1], locale);
                     html_tag[1] = &translated_text;
                     translated_html.push_str("<");
                     translated_html.push_str(&html_tag.join(">"));
@@ -54,8 +54,20 @@ pub fn translate_text(input: &str) -> String {
         return translated_html;
     }
 
+    let language = match locale {
+        "es_ES" => Language::Spanish,
+        "fr_FR" => Language::French,
+        "de_DE" => Language::German,
+        "it_IT" => Language::Italian,
+        "pt_PT" => Language::Portuguese,
+        "ru_RU" => Language::Russian,
+        "tr_TR" => Language::Turkish,
+        "zh_CN" => Language::Chinese,
+        _ => Language::Spanish
+    };
+
     let translator: Yandex = Yandex::with_key(&yandex_api_key);
-    let translated_text: String = match translator.translate(input.to_string(), InputLanguage::Automatic, Language::Spanish) {
+    let translated_text: String = match translator.translate(input.to_string(), InputLanguage::Defined(Language::English), language) {
         Ok(result) => result,
         Err(err) => panic!("API error, could not translate text : {:#?}", err)
     };

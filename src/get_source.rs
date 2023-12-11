@@ -16,11 +16,11 @@ pub fn get_source() {
     // Check if "ContentLayout_Localised" has records
     let has_localised_records: bool = conn.query_first("SELECT EXISTS(SELECT * FROM ContentLayout_Localised WHERE Locale = 'en_US')").unwrap().unwrap();
 
-    let mut query = "SELECT cl.Title, html.Content, cl.ID as RecordID FROM ContentLayout AS cl JOIN ContentLayoutHtml AS html ON cl.ID = html.ID WHERE cl.Locale = 'en_US'".to_string();
+    let mut query = "SELECT cl.Title, html.Content, cl.ID as RecordID FROM ContentLayout AS cl JOIN ContentLayoutHtml AS html ON cl.ID = html.ID".to_string();
 
     if has_localised_records {
         // Query localised tables
-        query = "SELECT cl.Title, html.Content, cl.RecordID as RecordID FROM ContentLayout_Localised AS cl JOIN ContentLayoutHtml_Localised AS html ON cl.RecordID = html.RecordID WHERE cl.Locale = 'en_US'".to_string();
+        query = "SELECT cl.Title, html.Content, cl.RecordID as RecordID FROM ContentLayout_Localised AS cl JOIN ContentLayoutHtml_Localised AS html ON cl.RecordID = html.RecordID WHERE cl.Locale = 'en_US' AND html.Locale = 'en_US'".to_string();
     }
 
     let selected_content: Vec<(_, _, _)> = conn.query_map(query, |(title, content, record_id)| -> (Option<String>, Option<String>, Option<String>) {
