@@ -19,3 +19,4 @@ Next, translate the CSV file with `cargo run translate <locale>` where `<locale>
 
 Finally, insert the translated records into the appropriate Fluent tables with `cargo run insert_translations <locale>`. This defaults to Spanish.
 
+Shortcut to run all: `cargo run all es_ES`
