@@ -1,4 +1,10 @@
 # Translator App for Fluent CLM
+Rust app to translate HTML content from a SilverStripe Content Layout Module into Fluent tables.
+- Generates an english_original.csv file from a MySQL query result
+- Parses HTML content
+- Uses Yandex translation crate to translate from English to desired language
+- Outputs a {DESIRED_LANG}_output.csv file
+- Inserts the translated HTML into Fluent tables
 
 ## Usage
 First create the US English default and the desired language locales in SilverStripe and set to the home country variant (e.g. Spain Spanish).
